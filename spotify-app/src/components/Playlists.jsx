@@ -23,8 +23,8 @@ export default function Playlists() {
       });
 
       dispatch({ type: reducerCases.SET_PLAYLISTS, playlists });
+      console.log(playlists)
     };
-    console.log(playlists);
     getPlaylistData();
   }, [token, dispatch]);
   return (
