@@ -1,48 +1,49 @@
-import React, {useEffect} from 'react'
-import { useStateProvider } from '../utils/StateProvider'
+import React, { useEffect } from "react";
+import { useStateProvider } from "../utils/StateProvider";
 import axios from "axios";
-import { reducerCases } from '../utils/Constant';
-import styled from 'styled-components';
-
+import { reducerCases } from "../utils/Constant";
+import styled from "styled-components";
 
 export default function Playlists() {
-  const [{token, playlists}, dispatch] = useStateProvider();
+  const [{ token, playlists }, dispatch] = useStateProvider();
   useEffect(() => {
-    const getPlaylistData = async() =>{
-        const response = await axios.get(
-          "https://api.spotify.com/v1/me/playlists", 
+    const getPlaylistData = async () => {
+      const response = await axios.get(
+        "https://api.spotify.com/v1/me/playlists",
         {
           headers: {
-            Authorization:"Bearer " + token, 
+            Authorization: "Bearer " + token,
             "Content-Type": "application/json",
           },
         }
       );
-      const {items} = response.data
-      const playlists = items.map(({name,id})=> {
-        return {name, id}
+      const { items } = response.data;
+      const playlists = items.map(({ name, id }) => {
+        return { name, id };
       });
-      dispatch({type:reducerCases.SET_PLAYLISTS, playlists})
+
+      dispatch({ type: reducerCases.SET_PLAYLISTS, playlists });
     };
+    console.log(playlists);
     getPlaylistData();
   }, [token, dispatch]);
   return (
-  <Container>
-    <ul>
-      {playlists.map(({name, id}) => {
-        return <li key={id}>{name}</li>;
-      })} 
-      {playlists.map(({name, id}) => {
-        return <li key={id}>{name}</li>;
-      })} 
-    </ul>
-  </Container>
+    <Container>
+      <ul>
+        {playlists.map(({ name, id }) => {
+          return <li key={id}>{name}</li>;
+        })}
+        {playlists.map(({ name, id }) => {
+          return <li key={id}>{name}</li>;
+        })}
+      </ul>
+    </Container>
   );
 }
 
 const Container = styled.div`
-height: 100%;
-overflow: hidden;
+  height: 100%;
+  overflow: hidden;
   ul {
     list-style-type: none;
     display: flex;
@@ -55,7 +56,7 @@ overflow: hidden;
     &::-webkit-scrollbar {
       width: 0.7rem;
       &-thumb {
-        background-color: rgba(255,255,255,0.6);
+        background-color: rgba(255, 255, 255, 0.6);
       }
     }
     li {
@@ -65,7 +66,7 @@ overflow: hidden;
       transition: 0.3s ease-in-out;
       &:hover {
         color: white;
+      }
     }
   }
-}
-`
+`;
