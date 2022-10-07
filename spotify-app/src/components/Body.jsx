@@ -5,7 +5,7 @@ import { useStateProvider } from "../utils/StateProvider";
 import axios from "axios";
 import { reducerCases } from "../utils/Constant";
 
-export default function Body(headerBackground) {
+export default function Body({headerBackground}) {
   const [{ token, selectedPlaylistId, selectedPlaylist }, dispatch] =
     useStateProvider();
   useEffect(() => {
@@ -41,6 +41,11 @@ export default function Body(headerBackground) {
     };
     getInitialPlaylist();
   }, [token, dispatch, selectedPlaylistId]);
+  const msToMinuteAndSeconds = (ms) => {
+    const minutes = Math.floor(ms/60000);
+    const seconds = ((ms%60000) / 1000).toFixed(0);
+    return minutes + ":" + (seconds <10 ? "0" : "") + seconds;
+  }
 
   return (
     <Container headerBackground={headerBackground}>
@@ -106,7 +111,7 @@ export default function Body(headerBackground) {
                         <span>{album}</span>
                       </div>
                       <div className="col">
-                        <span>{duration}</span>
+                        <span>{msToMinuteAndSeconds(duration)}</span>
                       </div>
                     </div>
                   );
@@ -144,17 +149,16 @@ const Container = styled.div`
       }
     }
   }
-
   .list {
     .header__row {
       display: grid;
       grid-template-columns: 0.3fr 3fr 2fr 0.1fr;
-      color: #dddcdc;
       margin: 1rem 0 0 0;
+      color: #dddcdc;
       position: sticky;
-      top 15vh
+      top: 15vh;
       padding: 1rem 3rem;
-      transition: 0.3s easi-in-out;
+      transition: 0.3s ease-in-out;
       background-color: ${({ headerBackground }) =>
         headerBackground ? "#000000dc" : "none"};
     }
@@ -166,7 +170,7 @@ const Container = styled.div`
       .row {
         padding: 0.5rem 1rem;
         display: grid;
-        grid-template-columns: 0.3fr 3.1fr 2fr 0.1fr;
+        grid-template-columns: 0.3fr 3.1fr 1.8fr 0.1fr;
         &:hover {
           background-color: rgba(0, 0, 0, 0.7);
         }
